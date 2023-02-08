@@ -14,7 +14,10 @@
 int __init pipeline_init(void)
 {
 	struct ipipe_sysinfo sysinfo;
+	// struct ipipe_domain *ipd;
 	int ret, virq;
+	// int irq, ctlbits;
+	// char handling, lockbit, virtuality;
 
 	ret = ipipe_select_timers(&xnsched_realtime_cpus);
 	if (ret < 0)
@@ -46,6 +49,44 @@ int __init pipeline_init(void)
 	ret = xnclock_init();
 	if (ret)
 		goto fail_clock;
+
+	// ipd = ipipe_head_domain;
+	// mutex_lock(&ipd->mutex);
+
+	// for (irq = 0; irq < IPIPE_NR_IRQS; irq++) {
+	// 	ctlbits = ipd->irqs[irq].control;
+	// 	/*
+	// 	 * There might be a hole between the last external IRQ
+	// 	 * and the first virtual one; skip it.
+	// 	 */
+	// 	if (irq >= IPIPE_NR_XIRQS && !ipipe_virtual_irq_p(irq))
+	// 		continue;
+
+	// 	if (ctlbits & IPIPE_HANDLE_MASK)
+	// 		handling = 'H';
+	// 	else
+	// 		handling = '.';
+
+	// 	if (ctlbits & IPIPE_LOCK_MASK)
+	// 		lockbit = 'L';
+	// 	else
+	// 		lockbit = '.';
+
+	// 	if (ipipe_virtual_irq_p(irq))
+	// 		virtuality = 'V';
+	// 	else
+	// 		virtuality = '.';
+
+	// 	if (ctlbits & IPIPE_HANDLE_MASK)
+	// 		printk(" %4u:  %c%c%c  %pf\n",
+	// 			   irq, handling, lockbit, virtuality,
+	// 			   ipd->irqs[irq].handler);
+	// 	// else
+	// 	// 	printk(" %4u:  %c%c%c\n",
+	// 	// 		   irq, handling, lockbit, virtuality);
+	// }
+
+	// mutex_unlock(&ipd->mutex);
 
 	return 0;
 

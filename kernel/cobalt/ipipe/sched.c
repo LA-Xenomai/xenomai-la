@@ -62,6 +62,8 @@ static void giveup_fpu(struct xnthread *thread)
 
 #else
 
+static inline void switch_fpu(void) { }
+
 static inline void giveup_fpu(struct xnthread *thread)
 { }
 
