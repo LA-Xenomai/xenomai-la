@@ -7,10 +7,10 @@
  * version 2 of the License, or (at your option) any later version.
  */
 
-#ifndef _LIB_COBALT_ARM64_TIME_H
-#define _LIB_COBALT_ARM64_TIME_H
+#ifndef _LIB_COBALT_LOONGARCH_TIME_H
+#define _LIB_COBALT_LOONGARCH_TIME_H
 
 #define COBALT_VDSO_VERSION	"LINUX_2.6.39"
 #define COBALT_VDSO_GETTIME	"__kernel_clock_gettime"
 
-#endif /* !_LIB_COBALT_ARM64_TIME_H */
+#endif /* !_LIB_COBALT_LOONGARCH_TIME_H */

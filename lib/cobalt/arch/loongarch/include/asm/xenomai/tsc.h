@@ -22,8 +22,8 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
-#ifndef _LIB_COBALT_ARM64_TSC_H
-#define _LIB_COBALT_ARM64_TSC_H
+#ifndef _LIB_COBALT_LOONGARCH_TSC_H
+#define _LIB_COBALT_LOONGARCH_TSC_H
 
 #include <asm/xenomai/uapi/tsc.h>
 #include <asm/xenomai/features.h>
@@ -40,7 +40,7 @@ static inline uint64_t get_counter(void)
 {
         uint64_t cval;
 
-	asm volatile("isb; mrs %0, cntvct_el0; isb; " : "=r" (cval) :: "memory");
+	asm volatile("ibar 0x0; rdtime.d %0, $zero; ibar 0x0; " : "=r" (cval) :: "memory");
 
 	return cval;
 }
@@ -51,4 +51,4 @@ unsigned long long cobalt_read_legacy_tsc(void)
 	return get_counter();
 }
 
-#endif /* !_LIB_COBALT_ARM64_TSC_H */
+#endif /* !_LIB_COBALT_LOONGARCH_TSC_H */

@@ -9,16 +9,16 @@
 
 static inline void xnarch_get_latencies(struct xnclock_gravity *p)
 {
-	unsigned int sched_latency;
-
+	unsigned int ulat;
 #if CONFIG_XENO_OPT_TIMING_SCHEDLAT != 0
-	sched_latency = CONFIG_XENO_OPT_TIMING_SCHEDLAT;
+	ulat = CONFIG_XENO_OPT_TIMING_SCHEDLAT;
+#elif defined(CONFIG_ARCH_HISI)
+	ulat = 4000;
 #else
-	sched_latency = 5000;
+	ulat = 4000;
 #endif
-	p->user = xnclock_ns_to_ticks(&nkclock, sched_latency);
-	p->kernel = xnclock_ns_to_ticks(&nkclock,
-					CONFIG_XENO_OPT_TIMING_KSCHEDLAT);
+	p->user = xnclock_ns_to_ticks(&nkclock, ulat);
+	p->kernel = xnclock_ns_to_ticks(&nkclock, CONFIG_XENO_OPT_TIMING_KSCHEDLAT);
 	p->irq = xnclock_ns_to_ticks(&nkclock, CONFIG_XENO_OPT_TIMING_IRQLAT);
 }
 

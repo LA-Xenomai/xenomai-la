@@ -11,6 +11,8 @@
 #include <asm/byteorder.h>
 #include <cobalt/kernel/assert.h>
 
+#define XNARCH_HOST_TICK_IRQ __ipipe_hrtimer_irq
+
 /* D-side always behaves as PIPT on AArch64 (see arch/loongarch/include/asm/cachetype.h) */
 #define xnarch_cache_aliasing() 0
 
@@ -22,7 +24,7 @@ static inline __attribute_const__ unsigned long ffnz(unsigned long ul)
 	XENO_WARN_ON(COBALT, ul == 0);
 
 	__asm__ (
-	         "clz.w\t%0, %1\n"
+	         "ctz.d\t%0, %1\n"
 	        : "=r" (__r) : "r"(ul) : "cc");
 
 	return __r;

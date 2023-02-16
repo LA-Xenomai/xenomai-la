@@ -15,16 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
  */
-#ifndef _LIB_COBALT_ARM64_FEATURES_H
-#define _LIB_COBALT_ARM64_FEATURES_H
+#ifndef _LIB_COBALT_LOONGARCH_FEATURES_H
+#define _LIB_COBALT_LOONGARCH_FEATURES_H
 
 #include_next <features.h>
 #include <xeno_config.h>
-
-#define __LINUX_ARM_ARCH__ 8
 
 #include <asm/xenomai/uapi/features.h>
 
 int cobalt_fp_detect(void);
 
-#endif /* !_LIB_COBALT_ARM64_FEATURES_H */
+#endif /* !_LIB_COBALT_LOONGARCH_FEATURES_H */

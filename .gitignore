@@ -1,3 +1,6 @@
+.cache/
+.vscode/
+build/
 Makefile.in
 include/xeno_config.h.in*
 config/compile

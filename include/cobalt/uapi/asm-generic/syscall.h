@@ -22,7 +22,9 @@
 #include <asm/xenomai/uapi/features.h>
 #include <asm/xenomai/uapi/syscall.h>
 
+#ifndef __COBALT_SYSCALL_BIT
 #define __COBALT_SYSCALL_BIT	0x10000000
+#endif
 
 struct cobalt_bindreq {
 	/** Features userland requires. */

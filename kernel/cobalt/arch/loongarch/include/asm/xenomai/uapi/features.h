@@ -1,8 +1,8 @@
 /*
  * Copyright (C) 2005 Philippe Gerum <rpm@xenomai.org>.
  *
- * ARM port
- *   Copyright (C) 2022 MiaoHao-oops
+ * Loongarch port
+ *   Copyright (C) 2022 Miao Hao
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -40,5 +40,8 @@ static inline const char *get_feature_label(unsigned int feature)
 {
 	return get_generic_feature_label(feature);
 }
+
+/* attention: 0x10000000 is conflict with lbt mask */
+#define __COBALT_SYSCALL_BIT	0x100000000
 
 #endif /* !_COBALT_LOONGARCH_ASM_UAPI_FEATURES_H */
