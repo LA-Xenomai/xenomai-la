@@ -178,8 +178,8 @@ static int do_sysmem_ioctls(struct rtdm_fd *fd,
 	spl_t s;
 	int ret;
 
-	switch (request | 0xffffffff00000000) {
-	case MEMDEV_RTIOC_STAT:
+	switch (request) {
+	case (unsigned long)MEMDEV_RTIOC_STAT:
 		xnlock_get_irqsave(&cobalt_heap.lock, s);
 		stat.size = xnheap_get_size(&cobalt_heap);
 		stat.free = xnheap_get_free(&cobalt_heap);
