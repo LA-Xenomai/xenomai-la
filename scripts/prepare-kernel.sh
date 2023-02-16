@@ -294,6 +294,9 @@ while : ; do
    arm64|aarch64)
       linux_arch=arm64
       ;;
+   loongarch*)
+      linux_arch=loongarch
+      ;;
    *)
       echo "$me: unsupported architecture: $linux_arch" >&2
       linux_arch=
