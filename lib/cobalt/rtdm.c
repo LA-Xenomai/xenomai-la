@@ -168,7 +168,7 @@ static int do_ioctl(int fd, unsigned int request, void *arg)
 
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
 
-	request_d = request & 0x80000000 ? (request & 0xffffffff00000000) : request;
+	request_d = request & 0x80000000 ? (request | 0xffffffff00000000) : request;
 	ret = XENOMAI_SYSCALL3(sc_cobalt_ioctl,	fd, request_d, arg);
 
 	pthread_setcanceltype(oldtype, NULL);
