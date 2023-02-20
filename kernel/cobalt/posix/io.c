@@ -115,16 +115,16 @@ static int put_mmsg(void __user **u_mmsg_p, const struct mmsghdr *mmsg)
 }
 
 COBALT_SYSCALL(recvmmsg, primary,
-	       (int fd, struct mmsghdr __user *u_msgvec, unsigned int vlen,
-		unsigned int flags, struct __user_old_timespec __user *u_timeout))
+	       (int fd, struct mmsghdr __user *u_msgvec, unsigned long vlen,
+		unsigned long flags, struct __user_old_timespec __user *u_timeout))
 {
 	return __rtdm_fd_recvmmsg(fd, u_msgvec, vlen, flags, u_timeout,
 				  get_mmsg, put_mmsg, get_timespec);
 }
 
 COBALT_SYSCALL(recvmmsg64, primary,
-	       (int fd, struct mmsghdr __user *u_msgvec, unsigned int vlen,
-		unsigned int flags, struct __kernel_timespec __user *u_timeout))
+	       (int fd, struct mmsghdr __user *u_msgvec, unsigned long vlen,
+		unsigned long flags, struct __kernel_timespec __user *u_timeout))
 {
 	return __rtdm_fd_recvmmsg64(fd, u_msgvec, vlen, flags, u_timeout,
 				    get_mmsg, put_mmsg);
@@ -151,7 +151,7 @@ static int put_mmsglen(void __user **u_mmsg_p, const struct mmsghdr *mmsg)
 
 COBALT_SYSCALL(sendmmsg, primary,
 	       (int fd, struct mmsghdr __user *u_msgvec,
-		unsigned int vlen, unsigned int flags))
+		unsigned long vlen, unsigned long flags))
 {
 	return __rtdm_fd_sendmmsg(fd, u_msgvec, vlen, flags,
 				  get_mmsg, put_mmsglen);
