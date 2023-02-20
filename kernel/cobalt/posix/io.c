@@ -61,7 +61,7 @@ COBALT_SYSCALL(fcntl, current, (int fd, int cmd, long arg))
 }
 
 COBALT_SYSCALL(ioctl, handover,
-	       (int fd, unsigned int request, void __user *arg))
+	       (int fd, unsigned long request, void __user *arg))
 {
 	return rtdm_fd_ioctl(fd, request, arg);
 }

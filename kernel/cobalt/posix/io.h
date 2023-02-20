@@ -38,7 +38,7 @@ COBALT_SYSCALL_DECL(close, (int fd));
 COBALT_SYSCALL_DECL(fcntl, (int fd, int cmd, long arg));
 
 COBALT_SYSCALL_DECL(ioctl,
-		    (int fd, unsigned int request, void __user *arg));
+		    (int fd, unsigned long request, void __user *arg));
 
 COBALT_SYSCALL_DECL(read,
 		    (int fd, void __user *buf, size_t size));
