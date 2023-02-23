@@ -1,6 +1,9 @@
 /*
  * Copyright (C) 2011 Gilles Chanteperdrix <gch@xenomai.org>.
  *
+ * LoongArch Port
+ * Copyright (C) 2023 Miao Hao <haomiao19@mails.ucas.ac.cn>.
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -88,7 +91,7 @@ int cobalt_fp_detect(void)
 		return 0;
 
 	while (fgets(buffer, sizeof(buffer), fp)) {
-		if(strncmp(buffer, "Features", sizeof("Features") - 1))
+		if(strncmp(buffer, "features", sizeof("features") - 1))
 			continue;
 		if (strstr(buffer, "fp")) {
 			features |= __COBALT_HAVE_FPU;
