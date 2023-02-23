@@ -496,6 +496,7 @@ int handle_head_syscall(bool caller_is_relaxed, struct pt_regs *regs)
 
 	thread = xnthread_current();
 	code = __xn_syscall(regs);
+	printk("%s: syscall code: 0x%d", __func__, code);
 	if (code >= ARRAY_SIZE(cobalt_syscalls))
 		goto bad_syscall;
 
