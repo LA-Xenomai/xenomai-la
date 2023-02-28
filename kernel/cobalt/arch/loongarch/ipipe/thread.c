@@ -81,11 +81,6 @@ int xnarch_escalate(void)
 	return 0;
 }
 
-static inline struct thread_info *get_ti(struct task_struct *p)
-{
-	return (struct thread_info*)((unsigned long)p->stack & ~(THREAD_SIZE - 1));
-}
-
 static inline void xnthread_own_fpu(struct thread_info *ti, struct task_struct *p)
 {
 	enable_fpu();
@@ -98,7 +93,7 @@ int xnarch_handle_fpu_fault(struct xnthread *from,
 {
 	struct xnarchtcb *tcb = xnthread_archtcb(to);
 	struct task_struct *p = tcb->core.host_task;
-	struct thread_info *ti = get_ti(p);
+	struct thread_info *ti = tcb->core.tip;
 
 	if (!(p->flags & PF_USED_MATH)) {
 		unsigned int fcsr = p->thread.fpu.fcsr;
