@@ -29,9 +29,11 @@
 #include <linux/mm.h>
 #include <linux/jump_label.h>
 #include <asm/mmu_context.h>
+#include <asm/fpu.h>
 #include <cobalt/kernel/thread.h>
 #include <asm/processor.h>
 #include <asm/switch_to.h>
+#include <asm/thread_info.h>
 
 
 void xnarch_switch_to(struct xnthread *out, struct xnthread *in)
@@ -77,4 +79,41 @@ int xnarch_escalate(void)
 	}
 
 	return 0;
+}
+
+static inline struct thread_info *get_ti(struct task_struct *p)
+{
+	return (struct thread_info*)((unsigned long)p->stack & ~(THREAD_SIZE - 1));
+}
+
+static inline void xnthread_own_fpu(struct thread_info *ti, struct task_struct *p)
+{
+	enable_fpu();
+	set_ti_thread_flag(ti, TIF_USEDFPU);
+	KSTK_EUEN(p) |= CSR_EUEN_FPEN;
+}
+
+int xnarch_handle_fpu_fault(struct xnthread *from,
+			struct xnthread *to, struct ipipe_trap_data *d)
+{
+	struct xnarchtcb *tcb = xnthread_archtcb(to);
+	struct task_struct *p = tcb->core.host_task;
+	struct thread_info *ti = get_ti(p);
+
+	if (!(p->flags & PF_USED_MATH)) {
+		unsigned int fcsr = p->thread.fpu.fcsr;
+
+		xnthread_own_fpu(ti, p);
+		_init_fpu(fcsr);
+		p->flags |= PF_USED_MATH;
+	} else {
+		if (!test_ti_thread_flag(ti, TIF_USEDFPU)) {
+			if (cpu_has_fpu) {
+				xnthread_own_fpu(ti, p);
+				_restore_fp(&p->thread.fpu);
+			}
+		}
+	}
+
+	return 1;
 }

@@ -83,12 +83,8 @@ static inline int xnarch_fault_fpu_p(struct ipipe_trap_data *d)
 	return xnarch_fault_trap(d) == IPIPE_TRAP_FPU_ACC;
 }
 
-static inline int
-xnarch_handle_fpu_fault(struct xnthread *from,
-			struct xnthread *to, struct ipipe_trap_data *d)
-{
-	return 0;
-}
+int xnarch_handle_fpu_fault(struct xnthread *from,
+			struct xnthread *to, struct ipipe_trap_data *d);
 
 static inline void xnarch_enable_kfpu(void) { }
 
