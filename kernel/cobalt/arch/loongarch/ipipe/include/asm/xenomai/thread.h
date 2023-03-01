@@ -28,11 +28,6 @@
 
 struct xnarchtcb {
 	struct xntcb core;
-#ifdef ARM64_XENO_OLD_SWITCH
-	struct fpsimd_state xnfpsimd_state;
-	struct fpsimd_state *fpup;
-#define xnarch_fpu_ptr(tcb)     ((tcb)->fpup)
-#endif
 };
 
 #define xnarch_fault_regs(d)	((d)->regs)
@@ -74,7 +69,7 @@ void xnarch_switch_fpu(struct xnthread *from, struct xnthread *thread);
 static inline void xnarch_init_root_tcb(struct xnthread *thread) { }
 static inline void xnarch_init_shadow_tcb(struct xnthread *thread) { }
 static inline void xnarch_leave_root(struct xnthread *root) { }
-static inline void xnarch_switch_fpu(struct xnthread *f, struct xnthread *t) { }
+static inline void xnarch_switch_fpu(struct xnthread *f, struct xnthread *t);
 
 #endif /*  !ARM64_XENO_OLD_SWITCH */
 

@@ -24,6 +24,8 @@
  * 02111-1307, USA.
  */
 
+#include "asm/cpu-features.h"
+#include "linux/preempt.h"
 #include <linux/sched.h>
 #include <linux/ipipe.h>
 #include <linux/mm.h>
@@ -111,4 +113,18 @@ int xnarch_handle_fpu_fault(struct xnthread *from,
 	}
 
 	return 1;
+}
+
+static inline void xnarch_switch_fpu(struct xnthread *f, struct xnthread *t)
+{
+	struct xnarchtcb *to_tcb = xnthread_archtcb(t);
+	struct task_struct *to_p = to_tcb->core.host_task;
+	struct thread_info *to_ti = to_tcb->core.tip;
+	
+	preempt_disable();
+	if (cpu_has_fpu && !test_ti_thread_flag(to_ti, TIF_USEDFPU)) {
+		xnthread_own_fpu(to_ti, to_p);
+		_restore_fp(&to_p->thread.fpu);
+	}
+	preempt_enable();
 }
