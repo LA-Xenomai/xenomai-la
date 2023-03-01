@@ -24,8 +24,6 @@
  * 02111-1307, USA.
  */
 
-#include "asm/cpu-features.h"
-#include "linux/preempt.h"
 #include <linux/sched.h>
 #include <linux/ipipe.h>
 #include <linux/mm.h>
@@ -83,7 +81,7 @@ int xnarch_escalate(void)
 	return 0;
 }
 
-static inline void xnthread_own_fpu(struct thread_info *ti, struct task_struct *p)
+static inline void thread_own_fpu(struct thread_info *ti, struct task_struct *p)
 {
 	enable_fpu();
 	set_ti_thread_flag(ti, TIF_USEDFPU);
@@ -100,17 +98,19 @@ int xnarch_handle_fpu_fault(struct xnthread *from,
 	if (!(p->flags & PF_USED_MATH)) {
 		unsigned int fcsr = p->thread.fpu.fcsr;
 
-		xnthread_own_fpu(ti, p);
+		thread_own_fpu(ti, p);
 		_init_fpu(fcsr);
 		p->flags |= PF_USED_MATH;
 	} else {
-		if (!test_ti_thread_flag(ti, TIF_USEDFPU)) {
-			if (cpu_has_fpu) {
-				xnthread_own_fpu(ti, p);
-				_restore_fp(&p->thread.fpu);
-			}
+		if (cpu_has_fpu && !test_ti_thread_flag(ti, TIF_USEDFPU)) {
+			thread_own_fpu(ti, p);
+			_restore_fp(&p->thread.fpu);
 		}
 	}
+
+	xnlock_get(&nklock);
+	xnthread_set_state(to, XNFPU);
+	xnlock_put(&nklock);
 
 	return 1;
 }
@@ -123,7 +123,7 @@ void xnarch_switch_fpu(struct xnthread *f, struct xnthread *t)
 	
 	preempt_disable();
 	if (cpu_has_fpu && !test_ti_thread_flag(to_ti, TIF_USEDFPU)) {
-		xnthread_own_fpu(to_ti, to_p);
+		thread_own_fpu(to_ti, to_p);
 		_restore_fp(&to_p->thread.fpu);
 	}
 	preempt_enable();
