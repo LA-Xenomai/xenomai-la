@@ -115,7 +115,7 @@ int xnarch_handle_fpu_fault(struct xnthread *from,
 	return 1;
 }
 
-static inline void xnarch_switch_fpu(struct xnthread *f, struct xnthread *t)
+void xnarch_switch_fpu(struct xnthread *f, struct xnthread *t)
 {
 	struct xnarchtcb *to_tcb = xnthread_archtcb(t);
 	struct task_struct *to_p = to_tcb->core.host_task;
