@@ -11,11 +11,11 @@
 #include <asm/xenomai/uapi/fptest.h>
 #include <asm/hwcap.h>
 
-#define have_fp 0
+#define have_fp 0x1
 
 static inline int fp_kernel_supported(void)
 {
-	return 0;
+	return 1;
 }
 
 static inline int fp_linux_begin(void)
