@@ -28,6 +28,7 @@
 #include <asm/xenomai/uapi/tsc.h>
 #include <asm/xenomai/features.h>
 #include <inttypes.h>
+#include <stdint.h>
 #include <sys/time.h>
 
 typedef unsigned long long __xn_rdtsc_t(volatile unsigned *vaddr);
@@ -38,11 +39,15 @@ extern struct __xn_full_tscinfo __xn_tscinfo;
 
 static inline uint64_t get_counter(void)
 {
-        uint64_t cval;
+        int rID = 0;
+	uint64_t val = 0;
 
-	asm volatile("ibar 0x0; rdtime.d %0, $zero; ibar 0x0; " : "=r" (cval) :: "memory");
-
-	return cval;
+	__asm__ __volatile__(
+		"rdtime.d %0, %1 \n\t"
+		: "=r"(val), "=r"(rID)
+		:
+		);
+	return val;
 }
 
 static inline __attribute__((always_inline))

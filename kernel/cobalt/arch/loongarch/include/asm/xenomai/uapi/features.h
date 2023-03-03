@@ -28,7 +28,7 @@
 
 #define XENOMAI_FEAT_MAN (__xn_feat_generic_man_mask)
 
-#undef XNARCH_HAVE_LLMULSHFT
+#define XNARCH_HAVE_LLMULSHFT 1
 
 #undef XNARCH_HAVE_NODIV_LLIMD
 
