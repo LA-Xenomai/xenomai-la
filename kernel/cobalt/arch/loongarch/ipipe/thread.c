@@ -121,7 +121,7 @@ void xnarch_switch_fpu(struct xnthread *f, struct xnthread *t)
 	struct task_struct *to_p = to_tcb->core.host_task;
 	struct thread_info *to_ti = to_tcb->core.tip;
 
-	if (!(p->flags & PF_USED_MATH))
+	if (!(to_p->flags & PF_USED_MATH))
 		return;
 	
 	if (cpu_has_fpu && !test_ti_thread_flag(to_ti, TIF_USEDFPU)) {
