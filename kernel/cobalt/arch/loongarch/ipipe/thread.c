@@ -114,18 +114,3 @@ int xnarch_handle_fpu_fault(struct xnthread *from,
 
 	return 1;
 }
-
-void xnarch_switch_fpu(struct xnthread *f, struct xnthread *t)
-{
-	struct xnarchtcb *to_tcb = xnthread_archtcb(t);
-	struct task_struct *to_p = to_tcb->core.host_task;
-	struct thread_info *to_ti = to_tcb->core.tip;
-
-	if (!(to_p->flags & PF_USED_MATH))
-		return;
-	
-	if (cpu_has_fpu && !test_ti_thread_flag(to_ti, TIF_USEDFPU)) {
-		thread_own_fpu(to_ti, to_p);
-		_restore_fp(&to_p->thread.fpu);
-	}
-}
