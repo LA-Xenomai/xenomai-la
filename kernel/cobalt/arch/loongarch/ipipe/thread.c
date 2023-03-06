@@ -70,6 +70,7 @@ void xnarch_switch_to(struct xnthread *out, struct xnthread *in)
 	ipipe_switch_to(prev, next);
 	(void)last;
 #else
+	printk("[xnswitchto]: %p", next->stack);
 	switch_to(prev, next, last);
 #endif
 }
