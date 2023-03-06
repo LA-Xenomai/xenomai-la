@@ -2,7 +2,7 @@
  * Copyright (C) 2005 Philippe Gerum <rpm@xenomai.org>.
  *
  * Loongarch port
- *   Copyright (C) 2022 Miao Hao <haomiao19@mails.ucas.ac.cn>.
+ *   Copyright (C) 2022 Hao Miao <haomiao19@mails.ucas.ac.cn>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

@@ -2,7 +2,7 @@
  * Copyright (C) 2001,2002,2003,2004 Philippe Gerum <rpm@xenomai.org>.
  *
  * LOONGARCH port
- *   Copyright (C) 2022 Miao Hao <haomiao19@mails.ucas.ac.cn>.
+ *   Copyright (C) 2022 Hao Miao <haomiao19@mails.ucas.ac.cn>.
  *
  * Xenomai is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published

@@ -2,7 +2,7 @@
  * Copyright (C) 2011 Gilles Chanteperdrix <gch@xenomai.org>.
  *
  * LoongArch Port
- * Copyright (C) 2023 Miao Hao <haomiao19@mails.ucas.ac.cn>.
+ * Copyright (C) 2023 Hao Miao <haomiao19@mails.ucas.ac.cn>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
