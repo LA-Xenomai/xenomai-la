@@ -51,7 +51,7 @@ static const char *const fault_labels[] = {
 	[IPIPE_TRAP_BREAK] = "Instruction breakpoint",
 	[IPIPE_TRAP_FPU_ACC] = "Floating point access",
 	[IPIPE_TRAP_FPU_EXC] = "Floating point exception",
-	[IPIPE_TRAP_UNDEFINSTR] = "Undefined instruction",
+	[IPIPE_TRAP_RI] = "Reserved instruction",
 #ifdef IPIPE_TRAP_ALIGNMENT
 	[IPIPE_TRAP_ALIGNMENT] = "Unaligned access exception",
 #endif /* IPIPE_TRAP_ALIGNMENT */

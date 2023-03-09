@@ -23,10 +23,6 @@
 #include <linux/version.h>
 #include <asm-generic/xenomai/ipipe/thread.h>
 
-#if defined(CONFIG_XENO_ARCH_FPU) && LINUX_VERSION_CODE < KERNEL_VERSION(4,9,0)
-#define ARM64_XENO_OLD_SWITCH
-#endif
-
 struct xnarchtcb {
 	struct xntcb core;
 };
@@ -37,9 +33,10 @@ struct xnarchtcb {
 #define xnarch_fault_pc(d)	((unsigned long)((d)->regs->csr_era))
 
 #define xnarch_fault_pf_p(d)	((d)->exception == IPIPE_TRAP_ACCESS)
+#define xnarch_fault_fpu_p(d)	((d)->exception == IPIPE_TRAP_FPU_ACC)
 #define xnarch_fault_bp_p(d)	((current->ptrace & PT_PTRACED) &&	\
 				 ((d)->exception == IPIPE_TRAP_BREAK ||	\
-				  (d)->exception == IPIPE_TRAP_UNDEFINSTR))
+				  (d)->exception == IPIPE_TRAP_RI))
 
 #define xnarch_fault_notify(d) (!xnarch_fault_bp_p(d))
 
@@ -56,28 +53,9 @@ static inline void xnarch_enter_root(struct xnthread *root) { }
 int xnarch_escalate(void);
 void xnarch_init_shadow_tcb(struct xnthread *thread);
 
-#ifdef ARM64_XENO_OLD_SWITCH
-
-void xnarch_init_root_tcb(struct xnthread *thread);
-
-void xnarch_init_shadow_tcb(struct xnthread *thread);
-
-void xnarch_leave_root(struct xnthread *root);
-
-void xnarch_switch_fpu(struct xnthread *from, struct xnthread *thread);
-
-#else /* !ARM64_XENO_OLD_SWITCH */
-
 static inline void xnarch_init_root_tcb(struct xnthread *thread) { }
 static inline void xnarch_leave_root(struct xnthread *root) { }
 static inline void xnarch_switch_fpu(struct xnthread *f, struct xnthread *t) { }
-
-#endif /*  !ARM64_XENO_OLD_SWITCH */
-
-static inline int xnarch_fault_fpu_p(struct ipipe_trap_data *d)
-{
-	return xnarch_fault_trap(d) == IPIPE_TRAP_FPU_ACC;
-}
 
 int xnarch_handle_fpu_fault(struct xnthread *from,
 			struct xnthread *to, struct ipipe_trap_data *d);
