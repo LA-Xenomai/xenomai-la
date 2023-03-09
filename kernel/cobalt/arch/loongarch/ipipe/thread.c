@@ -70,7 +70,6 @@ void xnarch_switch_to(struct xnthread *out, struct xnthread *in)
 	ipipe_switch_to(prev, next);
 	(void)last;
 #else
-	printk("[xnswitchto]: %p", next->stack);
 	switch_to(prev, next, last);
 #endif
 }
@@ -117,4 +116,9 @@ int xnarch_handle_fpu_fault(struct xnthread *from,
 	xnlock_put(&nklock);
 
 	return 1;
+}
+
+void xnarch_init_shadow_tcb(struct xnthread *thread)
+{
+	xnthread_clear_state(thread, XNFPU);
 }

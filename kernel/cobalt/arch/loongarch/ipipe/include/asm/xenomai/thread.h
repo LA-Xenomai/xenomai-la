@@ -19,6 +19,7 @@
 #ifndef _COBALT_LOONGARCH_ASM_THREAD_H
 #define _COBALT_LOONGARCH_ASM_THREAD_H
 
+#include <linux/ipipe.h>
 #include <linux/version.h>
 #include <asm-generic/xenomai/ipipe/thread.h>
 
@@ -53,6 +54,7 @@ void xnarch_switch_to(struct xnthread *out, struct xnthread *in);
 static inline void xnarch_enter_root(struct xnthread *root) { }
 
 int xnarch_escalate(void);
+void xnarch_init_shadow_tcb(struct xnthread *thread);
 
 #ifdef ARM64_XENO_OLD_SWITCH
 
@@ -67,7 +69,6 @@ void xnarch_switch_fpu(struct xnthread *from, struct xnthread *thread);
 #else /* !ARM64_XENO_OLD_SWITCH */
 
 static inline void xnarch_init_root_tcb(struct xnthread *thread) { }
-static inline void xnarch_init_shadow_tcb(struct xnthread *thread) { }
 static inline void xnarch_leave_root(struct xnthread *root) { }
 static inline void xnarch_switch_fpu(struct xnthread *f, struct xnthread *t) { }
 
