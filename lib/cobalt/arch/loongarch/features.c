@@ -32,6 +32,7 @@
 #include <asm/xenomai/syscall.h>
 #include <asm/xenomai/tsc.h>
 #include <asm/xenomai/features.h>
+#include <asm/xenomai/syscall.h>
 #include <asm/xenomai/uapi/fptest.h>
 #include "internal.h"
 
@@ -66,3 +67,10 @@ int cobalt_fp_detect(void)
 
 	return features;
 }
+
+DEFINE_XENOMAI_SYSCALL(0)
+DEFINE_XENOMAI_SYSCALL(1)
+DEFINE_XENOMAI_SYSCALL(2)
+DEFINE_XENOMAI_SYSCALL(3)
+DEFINE_XENOMAI_SYSCALL(4)
+DEFINE_XENOMAI_SYSCALL(5)

@@ -56,19 +56,24 @@
 	__emit_syscall4("r" (__x4), ##__args)
 
 #define DEFINE_XENOMAI_SYSCALL(__argnr)					\
-static inline long int __attribute__((always_inline))			\
-__xenomai_do_syscall##__argnr(long int __op			\
+long int		\
+__xenomai_do_syscall##__argnr(long int __op				\
 			      __xn_syscall_args##__argnr)		\
 {									\
 	__emit_syscall##__argnr();					\
 }
 
-DEFINE_XENOMAI_SYSCALL(0)
-DEFINE_XENOMAI_SYSCALL(1)
-DEFINE_XENOMAI_SYSCALL(2)
-DEFINE_XENOMAI_SYSCALL(3)
-DEFINE_XENOMAI_SYSCALL(4)
-DEFINE_XENOMAI_SYSCALL(5)
+#define DECL_XENOMAI_SYSCALL(__argnr)					\
+long int		\
+__xenomai_do_syscall##__argnr(long int __op				\
+			      __xn_syscall_args##__argnr)		\
+
+DECL_XENOMAI_SYSCALL(0);
+DECL_XENOMAI_SYSCALL(1);
+DECL_XENOMAI_SYSCALL(2);
+DECL_XENOMAI_SYSCALL(3);
+DECL_XENOMAI_SYSCALL(4);
+DECL_XENOMAI_SYSCALL(5);
 
 #define XENOMAI_SYSCALL0(__op)					\
 	__xenomai_do_syscall0(__op)
