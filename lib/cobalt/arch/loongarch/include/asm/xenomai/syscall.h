@@ -24,56 +24,55 @@
 #include <cobalt/uapi/syscall.h>
 
 #define __xn_syscall_args0
-#define __xn_syscall_args1 , long int __a1
+#define __xn_syscall_args1 __xn_syscall_args0, long int __a1
 #define __xn_syscall_args2 __xn_syscall_args1, long int __a2
 #define __xn_syscall_args3 __xn_syscall_args2, long int __a3
 #define __xn_syscall_args4 __xn_syscall_args3, long int __a4
 #define __xn_syscall_args5 __xn_syscall_args4, long int __a5
 
+# define __SYSCALL_CLOBBERS \
+	"$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7", "$t8",\
+	"memory"
+
 #define __emit_syscall0(__args...)					\
-	register long int __scno __asm__("a7") = __xn_syscode(__op); \
-	register long int __res __asm__("a0");			\
+	register long int __scno __asm__("a7") = __xn_syscode(__op); 	\
+	register long int __res __asm__("a0");				\
 	__asm__ __volatile__ (						\
 		"syscall 0x0;\n\t"					\
 		: "=r" (__res)						\
 		: "r" (__scno), ##__args				\
-		: "cc", "memory");					\
+		: __SYSCALL_CLOBBERS);					\
 	return __res
 #define __emit_syscall1(__args...)					\
-	register long int __x0 __asm__("a0") = __a1;		\
+	register long int __x0 __asm__("a0") = __a1;			\
 	__emit_syscall0("r" (__x0),  ##__args)
 #define __emit_syscall2(__args...)					\
-	register long int __x1 __asm__("a1") = __a2;		\
+	register long int __x1 __asm__("a1") = __a2;			\
 	__emit_syscall1("r" (__x1), ##__args)
 #define __emit_syscall3(__args...)					\
-	register long int __x2 __asm__("a2") = __a3;		\
+	register long int __x2 __asm__("a2") = __a3;			\
 	__emit_syscall2("r" (__x2), ##__args)
 #define __emit_syscall4(__args...)					\
-	register long int __x3 __asm__("a3") = __a4;		\
+	register long int __x3 __asm__("a3") = __a4;			\
 	__emit_syscall3("r" (__x3), ##__args)
-#define __emit_syscall5(__args...)	\
-	register long int __x4 __asm__("a4") = __a5;		\
+#define __emit_syscall5(__args...)					\
+	register long int __x4 __asm__("a4") = __a5;			\
 	__emit_syscall4("r" (__x4), ##__args)
 
 #define DEFINE_XENOMAI_SYSCALL(__argnr)					\
-long int		\
+static inline long int __attribute__((always_inline))			\
 __xenomai_do_syscall##__argnr(long int __op				\
 			      __xn_syscall_args##__argnr)		\
 {									\
 	__emit_syscall##__argnr();					\
 }
 
-#define DECL_XENOMAI_SYSCALL(__argnr)					\
-long int		\
-__xenomai_do_syscall##__argnr(long int __op				\
-			      __xn_syscall_args##__argnr)		\
-
-DECL_XENOMAI_SYSCALL(0);
-DECL_XENOMAI_SYSCALL(1);
-DECL_XENOMAI_SYSCALL(2);
-DECL_XENOMAI_SYSCALL(3);
-DECL_XENOMAI_SYSCALL(4);
-DECL_XENOMAI_SYSCALL(5);
+DEFINE_XENOMAI_SYSCALL(0)
+DEFINE_XENOMAI_SYSCALL(1)
+DEFINE_XENOMAI_SYSCALL(2)
+DEFINE_XENOMAI_SYSCALL(3)
+DEFINE_XENOMAI_SYSCALL(4)
+DEFINE_XENOMAI_SYSCALL(5)
 
 #define XENOMAI_SYSCALL0(__op)					\
 	__xenomai_do_syscall0(__op)
@@ -82,25 +81,25 @@ DECL_XENOMAI_SYSCALL(5);
 			      (long int)__a1)
 #define XENOMAI_SYSCALL2(__op, __a1, __a2)			\
 	__xenomai_do_syscall2(__op,				\
-			      (long int)__a1,		\
+			      (long int)__a1,			\
 			      (long int)__a2)
 #define XENOMAI_SYSCALL3(__op, __a1, __a2, __a3)		\
 	__xenomai_do_syscall3(__op,				\
-			      (long int)__a1,		\
-			      (long int)__a2,		\
+			      (long int)__a1,			\
+			      (long int)__a2,			\
 			      (long int)__a3)
 #define XENOMAI_SYSCALL4(__op, __a1, __a2, __a3, __a4)		\
 	__xenomai_do_syscall4(__op,				\
-			      (long int)__a1,		\
-			      (long int)__a2,		\
-			      (long int)__a3,		\
+			      (long int)__a1,			\
+			      (long int)__a2,			\
+			      (long int)__a3,			\
 			      (long int)__a4)
 #define XENOMAI_SYSCALL5(__op, __a1, __a2, __a3, __a4, __a5)	\
 	__xenomai_do_syscall5(__op,				\
-			      (long int)__a1,		\
-			      (long int)__a2,		\
-			      (long int)__a3,		\
-			      (long int)__a4,		\
+			      (long int)__a1,			\
+			      (long int)__a2,			\
+			      (long int)__a3,			\
+			      (long int)__a4,			\
 			      (long int)__a5)
 #define XENOMAI_SYSBIND(__breq)					\
 	__xenomai_do_syscall1(sc_cobalt_bind,			\
