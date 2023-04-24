@@ -23,28 +23,41 @@
 
 #include <asm/xenomai/uapi/features.h>
 
-// static inline __attribute__((__const__)) long long
-// mach_loongarch_llimd (long long op, unsigned m, unsigned d)
-// {
-// 	long long res;
+static inline __attribute__((__const__)) long long
+mach_loongarch_llimd(long long op,
+			  unsigned m,
+			  unsigned d)
+{
+	long long res;
+	int sign = 0;
 
-// 	__asm__ __volatile__ (
-// 		"mul.d		$t0, %[op], %[mul]	\t\n"
-// 		"mulh.d		$t1, %[op], %[mul]	\t\n"
-// 		"ori		$t2, $zero, 1		\t\n"
-// 		"slli.d		$t2, $t2, 63		\t\n"
-// 		"div.du		$t2, $t2, %[div]	\t\n"
-// 		"slli.d		$t1, $t1, 1		\t\n"
-// 		"mul.d		$t1, $t1, $t2		\t\n"
-// 		"div.du 	$t0, $t0, %[div]	\t\n"
-// 		"add.d		%[res], $t0, $t1	\t\n"
-// 		: [res] "=r" (res)
-// 		: [op] "r" (op), [mul] "r" (m), [div] "r" (d)
-// 		: "$t0", "$t1", "$t2", "memory");
+	if (op < 0LL) {
+		sign = 1;
+		op = -op;
+	}
 
-// 	return res;
-// }
-// #define xnarch_llimd(ll,m,d) mach_loongarch_llimd((ll),(m),(d))
+	__asm__ __volatile__ (
+		"bstrpick.d	%[mul], %[mul], 31, 0	\t\n"
+		"bstrpick.d	%[div], %[div], 31, 0	\t\n"
+		"mul.d		$t0, %[op], %[mul]	\t\n"
+		"mulh.du	$t1, %[op], %[mul]	\t\n"
+		"bstrpick.d	$t3, $t0, 31, 0		\t\n"
+		"bstrins.d	$t0, $t1, 31, 0		\t\n"
+		"rotri.d	$t0, $t0, 32		\t\n"
+		"div.du		$t2, $t0, %[div]	\t\n"
+		"mod.du		$t0, $t0, %[div]	\t\n"
+		"slli.d		$t0, $t0, 32		\t\n"
+		"add.d		$t0, $t0, $t3		\t\n"
+		"div.du		$t0, $t0, %[div]	\t\n"
+		"slli.d		$t2, $t2, 32		\t\n"
+		"add.d		%[res], $t0, $t2	\t\n"
+		: [res] "=r" (res)
+		: [op] "r" (op), [mul] "r" (m), [div] "r" (d)
+		: "$t0", "$t1", "$t2", "$t3", "memory");
+
+	return sign ? -res : res;
+}
+#define xnarch_llimd(ll,m,d) mach_loongarch_llimd((ll),(m),(d))
 
 static inline __attribute__((__const__)) long long
 mach_loongarch_llmulshft(long long op, unsigned m, unsigned s)
