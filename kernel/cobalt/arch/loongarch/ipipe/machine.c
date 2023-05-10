@@ -18,6 +18,7 @@
  *   02111-1307, USA.
  */
 
+#include "asm/ipipe_base.h"
 #include <linux/mm.h>
 #include <linux/ipipe_tickdev.h>
 #include <cobalt/kernel/arith.h>
@@ -44,12 +45,15 @@ static void mach_loongarch_prefault(struct vm_area_struct *vma)
 }
 
 static const char *const fault_labels[] = {
+	[IPIPE_TRAP_MAYDAY] = "Internal recovery trap",
 	[IPIPE_TRAP_ACCESS] = "Data or instruction access",
 	[IPIPE_TRAP_SECTION] = "Section fault",
 	[IPIPE_TRAP_DABT] = "Generic data abort",
 	[IPIPE_TRAP_UNKNOWN] = "Unknown exception",
 	[IPIPE_TRAP_BREAK] = "Instruction breakpoint",
 	[IPIPE_TRAP_FPU_ACC] = "Floating point access",
+	[IPIPE_TRAP_LSX_ACC] = "LSX access",
+	[IPIPE_TRAP_LASX_ACC] = "LASX access",
 	[IPIPE_TRAP_FPU_EXC] = "Floating point exception",
 	[IPIPE_TRAP_RI] = "Reserved instruction",
 #ifdef IPIPE_TRAP_ALIGNMENT
